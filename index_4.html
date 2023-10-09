@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>R Projekte - Kapitel 4</title>
+
+<script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/lumen.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="bbb1.html">1. Grundlagen Programmierung mit R</a>
+</li>
+<li>
+  <a href="index_2.html">2. Data Science mit R</a>
+</li>
+<li>
+  <a href="index_3.html">3. Machine Learning</a>
+</li>
+<li>
+  <a href="index_4.html">4. Projekte mit R</a>
+</li>
+<li>
+  <a href="test_markdown.html">Testen</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">R Projekte - Kapitel 4</h1>
+
+</div>
+
+
+<div id="code-code-code" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Code, Code, Code</h1>
+<div id="schleife" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Schleife</h2>
+<p>Gegeben ist ein Vektor. Konstruiere über eine Schleife einen neuen
+Vektor, in dem beginnend bei dem ersten Element, nur jede zweite Zahl
+steht.</p>
+<pre class="r"><code>f &lt;- c(1, 3, 2, 4, 3, 5, 4, 6, 5, 7, 6, 8, 7, 9, 8, 10, 9, 11, 10)
+
+# Initialisieren Sie den leeren Vektor k
+k &lt;- numeric()
+
+# Schleife, um jedes zweite Element von f in k einzufügen
+for (i in seq(1, length(f), by = 2)) {
+  k &lt;- c(k, f[i])
+}
+
+# Ergebnis anzeigen
+k</code></pre>
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
+</div>
+<div id="median" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Median</h2>
+<pre class="r"><code>md &lt;- function(Vektor) {
+  if (length(Vektor)%%2 == 0){
+    y &lt;- &quot;Gerade&quot;
+  } else {
+    y &lt;- &quot;Ungerade&quot;
+  }
+  return (y)
+}
+md(1:5)</code></pre>
+<pre><code>## [1] &quot;Ungerade&quot;</code></pre>
+<pre class="r"><code>md(1:6)</code></pre>
+<pre><code>## [1] &quot;Gerade&quot;</code></pre>
+<pre class="r"><code>md &lt;- function(Vektor) {
+  if (is.numeric(Vektor)){
+  if (length(Vektor)%%2 == 1){
+    y &lt;- ((length(Vektor)+1)/2)
+    z &lt;- sort(Vektor)[y]
+  } else {
+    y1 &lt;- (length(Vektor))/2
+    y2 &lt;- y1 + 1
+    z &lt;- (sort(Vektor)[y1]+sort(Vektor)[y2])/2
+  }
+  return (z)
+  } else {
+    &quot;Vektor nicht numerisch&quot;
+  }
+}
+md(c(34,11,99))</code></pre>
+<pre><code>## [1] 34</code></pre>
+<pre class="r"><code>md(c(34,11,37, 111))</code></pre>
+<pre><code>## [1] 35.5</code></pre>
+<pre class="r"><code>md(c(2,3,&quot;22&quot;))</code></pre>
+<pre><code>## [1] &quot;Vektor nicht numerisch&quot;</code></pre>
+</div>
+<div id="arithmetisches-mittel-1" class="section level2" number="1.3">
+<h2><span class="header-section-number">1.3</span> Arithmetisches Mittel
+1</h2>
+<pre class="r"><code>mn &lt;- function(Vektor){
+  v = vector()
+  for (i in Vektor){
+  v &lt;- append(v, i)
+  } 
+   cal = sum(v)/length(v)
+   cal
+}
+mn(1:6)</code></pre>
+<pre><code>## [1] 3.5</code></pre>
+</div>
+<div id="arithmetisches-mittel-2" class="section level2" number="1.4">
+<h2><span class="header-section-number">1.4</span> Arithmetisches Mittel
+2</h2>
+<pre class="r"><code>am &lt;- function(Vektor) {
+  summe &lt;- 0
+  for (i in Vektor) {
+    summe &lt;- i + summe
+  }
+  mittel &lt;- summe/length(Vektor)
+  return(mittel)
+}
+am(c(1,2,3))</code></pre>
+<pre><code>## [1] 2</code></pre>
+</div>
+<div id="anzahl-primzahlen-1-1000" class="section level2" number="1.5">
+<h2><span class="header-section-number">1.5</span> Anzahl Primzahlen
+1-1000</h2>
+<pre class="r"><code>primzahlen &lt;- function(Zahlen) {
+  zähler &lt;- 0
+  for (zahl in Zahlen) {
+    if (length(which(zahl %% Zahlen[Zahlen &lt;= zahl] == 0)) == 2) {
+      zähler = zähler + 1
+    }
+  }
+  return(zähler)
+}
+
+primzahlen(1:1000)</code></pre>
+<pre><code>## [1] 168</code></pre>
+</div>
+<div id="wieviele-qudratzahlen-bis-1000" class="section level2"
+number="1.6">
+<h2><span class="header-section-number">1.6</span> Wieviele Qudratzahlen
+bis 1000</h2>
+<pre class="r"><code>x = 1
+while (x*x &lt;= 1000) {
+  x = x + 1
+}
+print(x-1)</code></pre>
+<pre><code>## [1] 31</code></pre>
+</div>
+<div id="der-durchschnitt-aller-quersummen-von-1-bis-1000"
+class="section level2" number="1.7">
+<h2><span class="header-section-number">1.7</span> Der Durchschnitt
+aller Quersummen von 1 bis 1000</h2>
+<pre class="r"><code>Quersumme &lt;- function(Vektor) {
+  s = 0
+  for (i in 1:length(Vektor)) {
+  s = s + sum(as.numeric(strsplit(as.character(Vektor), &quot;&quot;)[[i]]))
+}
+dn = s/length(Vektor)
+return(dn)
+}
+Quersumme(1:1000)</code></pre>
+<pre><code>## [1] 13.501</code></pre>
+</div>
+<div id="quersumme-der-zahlen-und-durchschnitt-mit-sapply"
+class="section level2" number="1.8">
+<h2><span class="header-section-number">1.8</span> Quersumme der Zahlen
+und Durchschnitt mit <code>sapply()</code></h2>
+<pre class="r"><code>f &lt;- function(x) sum(as.numeric(strsplit(as.character(x), &quot;&quot;)[[1]]))
+sapply(11:20, f)</code></pre>
+<pre><code>##  [1]  2  3  4  5  6  7  8  9 10  2</code></pre>
+<pre class="r"><code>mean(sapply(1:1000, f))</code></pre>
+<pre><code>## [1] 13.501</code></pre>
+</div>
+<div id="quersumme-der-ersten-spalte-von-cars" class="section level2"
+number="1.9">
+<h2><span class="header-section-number">1.9</span> Quersumme der ersten
+Spalte von <code>cars</code></h2>
+<pre class="r"><code>g &lt;- numeric(50)
+for (i in 1:50) {  
+  g[i] = sum(as.numeric(strsplit(as.character(cars[,1][i]), &quot;&quot;)[[1]]))
+}
+g</code></pre>
+<pre><code>##  [1]  4  4  7  7  8  9  1  1  1  2  2  3  3  3  3  4  4  4  4  5  5  5  5  6  6
+## [26]  6  7  7  8  8  8  9  9  9  9 10 10 10  2  2  2  2  2  4  5  6  6  6  6  7</code></pre>
+</div>
+<div id="sotiere-2-vektoren-zusammen-der-größe-nach"
+class="section level2" number="1.10">
+<h2><span class="header-section-number">1.10</span> Sotiere 2 Vektoren
+zusammen der Größe nach</h2>
+<pre class="r"><code>sort_v &lt;- function(vektor) {
+  n &lt;- length(vektor)
+  merge &lt;- numeric(n)
+  i &lt;- 1
+  j &lt;- 1
+  k &lt;- 1
+  h &lt;- n %/% 2
+  v1 &lt;- sort(vektor[1:h])
+  v2 &lt;- sort(vektor[(h+1):n])
+  
+  while (i &lt;= length(v1) &amp; j &lt;= length(v2)) {
+    if (v1[i] &lt; v2[j]) {
+      merge[k] &lt;- v1[i]
+      i = i + 1
+    } else {
+      merge[k] &lt;- v2[j]
+      j = j + 1
+    }
+    k = k + 1
+  }
+  while (i &lt;= length(v1)) {
+    merge[k] &lt;- v1[i]
+    i = i + 1
+    k = k + 1
+  }
+  while (j &lt;= length(v2)) {
+    merge[k] &lt;- v2[j]
+    j = j + 1
+    k = k + 1
+  }
+  return(merge)
+}
+sort_v(c(3,4,5,1,2,9,8,6,11))</code></pre>
+<pre><code>## [1]  1  2  3  4  5  6  8  9 11</code></pre>
+</div>
+<div id="lokaler-zu-globaler-umgebung" class="section level2"
+number="1.11">
+<h2><span class="header-section-number">1.11</span> lokaler zu globaler
+Umgebung</h2>
+<pre class="r"><code>ds &lt;- function(hulo){
+  k &lt;&lt;- 55
+  l &lt;- 44
+  p &lt;- k + l - hulo
+  return (p)
+}
+
+ds(c(40, 50))</code></pre>
+<pre><code>## [1] 59 49</code></pre>
+<pre class="r"><code>k</code></pre>
+<pre><code>## [1] 55</code></pre>
+<pre class="r"><code>library(ggplot2)</code></pre>
+<pre><code>## Warning: Paket &#39;ggplot2&#39; wurde unter R Version 4.2.3 erstellt</code></pre>
+<pre class="r"><code>x1 &lt;- rnorm(50, mean = 4, sd = 10)
+y1 &lt;- rnorm(50, mean = 1, sd = 4)
+X &lt;- cbind(x1,y1)
+X &lt;- as.data.frame(X)
+ggplot(data = X,mapping = aes(x = x1, y = y1)) +
+  geom_point()</code></pre>
+<p><img src="index_4_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<pre class="r"><code>f1 &lt;- X |&gt;
+  filter(x1 &gt; 10 &amp; y1 &gt; 2) 
+f2 &lt;- X |&gt;
+  filter(x1 &lt;= 10 | y1 &lt;= 2)
+f3 &lt;- (x1 &gt; 10 &amp; y1 &gt; 2) 
+ggplot(X, aes(x=x1, y=y1)) +
+  geom_point(aes(colour = f3)) +
+  labs(colour = &quot;Ausreißer&quot;) +
+  geom_hline(yintercept = 2, linetype = &quot;dashed&quot;, color = &quot;black&quot;) +
+  geom_vline(xintercept = 10, linetype = &quot;dashed&quot;, color = &quot;black&quot;) +
+  scale_colour_discrete(labels=c(&quot;keine&quot;, &quot;Ausreißer&quot;))</code></pre>
+<p><img src="index_4_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+</div>
+<div id="rekursive-funktion.-berechne-12-22-n2" class="section level2"
+number="1.12">
+<h2><span class="header-section-number">1.12</span> Rekursive Funktion.
+Berechne 1^2 + 2^2 + … + N^2</h2>
+<pre class="r"><code>rek &lt;- function(N){
+  a &lt;- c()
+  rek_sum &lt;- function(N){
+    if (N == 1){
+      vec &lt;- append(a, 1)
+      sum_quadrat &lt;- sum(vec*vec)
+      return(sum_quadrat)
+    } else {
+      a &lt;&lt;- append(a, N)
+      rek_sum(N-1)
+    }
+  }
+  return(rek_sum(N))
+}
+rek(5)</code></pre>
+<pre><code>## [1] 55</code></pre>
+<pre class="r"><code>rek_sum_formel &lt;- function(N){
+  qs &lt;- (N*(N+1)*(2*N+1))/6
+  return(qs)
+}
+rek_sum_formel(5)</code></pre>
+<pre><code>## [1] 55</code></pre>
+</div>
+<div id="n2" class="section level2" number="1.13">
+<h2><span class="header-section-number">1.13</span> 1^2 + 2^2 + … +
+n^2</h2>
+<pre class="r"><code>sf &lt;- function(n){
+  if (n==1){
+    return(1)
+  } else {
+    return(n^2 + sf(n-1))
+  }
+}
+sf(5)</code></pre>
+<pre><code>## [1] 55</code></pre>
+</div>
+<div id="histogramme" class="section level2" number="1.14">
+<h2><span class="header-section-number">1.14</span> Histogramme</h2>
+<pre class="r"><code>hh&lt;-data.frame(c(2.41,3.72,4.22,5.22,6.63), c(&quot;A&quot;,&quot;A&quot;,&quot;A&quot;,&quot;A&quot;,&quot;A&quot;), c(1,2,3,4,5))
+colnames(hh) &lt;- c(&quot;da&quot;, &quot;F&quot;, &quot;DD&quot;)
+#data_by_gender &lt;- split(data, data$Faktor)
+ggplot(hh, aes(x = da)) + 
+  geom_histogram(binwidth = 1, color = &quot;red&quot;, fill = &quot;blue&quot;) #+</code></pre>
+<p><img src="index_4_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<pre class="r"><code>  #labs(title = &quot;Histogram of Age for Men&quot;, x = &quot;Age&quot;, y = &quot;Frequency&quot;)</code></pre>
+<pre class="r"><code>hh&lt;-data.frame(c(2.41,3.72,4.22,5.22,6.63,2.41,3.72,4.22,5.22,6.63,2.41,3.72,4.22,5.22,6.63), c(&quot;A&quot;,&quot;A&quot;,&quot;A&quot;,&quot;A&quot;,&quot;A&quot;,&quot;B&quot;,&quot;B&quot;,&quot;B&quot;,&quot;B&quot;,&quot;B&quot;,&quot;C&quot;,&quot;C&quot;,&quot;C&quot;,&quot;C&quot;,&quot;C&quot;), c(1,2,3,4,5,4,3,4,5,4,3,7,8,7,6))
+colnames(hh) &lt;- c(&quot;da&quot;, &quot;F&quot;, &quot;DD&quot;)
+ggplot(hh, aes(x = da)) + 
+  geom_histogram(binwidth = 1, color = &quot;red&quot;, fill = &quot;blue&quot;) +
+  facet_wrap(~ F) +
+  labs(title = &quot;Histogram of Age by Gender&quot;, x = &quot;y&quot;, y = &quot;Frequency&quot;)</code></pre>
+<p><img src="index_4_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<pre class="r"><code># Erstelle fiktive Daten
+set.seed(123)
+daten_m &lt;- rnorm(1000, mean = 5, sd = 2)
+daten_w &lt;- rnorm(1000, mean = 6, sd = 2)
+
+# Erstelle Histogramme
+hist(daten_m, density = 15, col = &quot;blue&quot;, main = &quot;Histogramme der Daten&quot;, xlab = &quot;Werte&quot;, ylab = &quot;Häufigkeit&quot;)
+hist(daten_w, density = 15, col = &quot;red&quot;, add = TRUE)
+
+# Erstelle Legende
+legend(&quot;topright&quot;, legend = c(&quot;Männlich&quot;, &quot;Weiblich&quot;), col = c(&quot;blue&quot;, &quot;red&quot;), lty = 1)</code></pre>
+<p><img src="index_4_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<pre class="r"><code># Erstelle fiktive Daten
+set.seed(123)
+daten_m &lt;- rnorm(1000, mean = 5, sd = 2)
+daten_w &lt;- rnorm(1000, mean = 6, sd = 2)
+
+# Schätze Dichtefunktionen
+dichte_m &lt;- density(daten_m)
+dichte_w &lt;- density(daten_w)
+
+# Erstelle Plot
+plot(dichte_m, xlim = c(0, 12), ylim = c(0, 0.3), main = &quot;Histogramme der Daten als Kurven&quot;, xlab = &quot;Werte&quot;, ylab = &quot;Dichte&quot;)
+lines(dichte_w, col = &quot;red&quot;)
+
+# Erstelle Legende
+legend(&quot;topright&quot;, legend = c(&quot;Männlich&quot;, &quot;Weiblich&quot;), col = c(&quot;black&quot;, &quot;red&quot;), lty = 1)</code></pre>
+<p><img src="index_4_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+</div>
+<div id="fakultät" class="section level2" number="1.15">
+<h2><span class="header-section-number">1.15</span> Fakultät</h2>
+<pre class="r"><code>fakultät &lt;-function(n){
+  if (n==0){
+    return(1)
+  } else {
+    return(n * fakultät(n-1))
+  }
+}
+fakultät(5)</code></pre>
+<pre><code>## [1] 120</code></pre>
+</div>
+<div id="binomialverteilung" class="section level2" number="1.16">
+<h2><span class="header-section-number">1.16</span>
+Binomialverteilung</h2>
+<pre class="r"><code>wkt_bnvtlg &lt;- function(k, n, p){
+  wk &lt;- (fakultät(n)/(fakultät(k)*(fakultät(n-k)))) * p^k * (1-p)^(n-k)
+  return(wk)
+}
+wkt_bnvtlg(1, 10, 0.3)</code></pre>
+<pre><code>## [1] 0.1210608</code></pre>
+</div>
+<div id="binomialverteilung-mit-vektor" class="section level2"
+number="1.17">
+<h2><span class="header-section-number">1.17</span> Binomialverteilung
+mit Vektor</h2>
+<pre class="r"><code>wkt_bnvtlg &lt;- function(k, n, p){
+  x = c()
+  for (i in k){
+      x &lt;- append(x,    (fakultät(n)/(fakultät(i)*(fakultät(n-i)))) * p^i *  (1-p)^(n-i))
+  }
+  return(x)
+}
+wkt_bnvtlg(c(1, 2, 5), 10, 0.3)</code></pre>
+<pre><code>## [1] 0.1210608 0.2334744 0.1029193</code></pre>
+</div>
+<div id="binomialverteilung-pxk" class="section level2" number="1.18">
+<h2><span class="header-section-number">1.18</span> Binomialverteilung
+P(X&lt;=k)</h2>
+<pre class="r"><code>kum_bnvtlg &lt;- function(k, n, p){
+  w = 0
+  for (i in 0:k){
+      w = w + wkt_bnvtlg(i, n, p)
+  }
+  return(w)
+}
+kum_bnvtlg(5, 10, 0.3)</code></pre>
+<pre><code>## [1] 0.952651</code></pre>
+</div>
+<div id="nas-in-tabelle-eliminieren-bzw.-die-entsprechenden-zeilen"
+class="section level2" number="1.19">
+<h2><span class="header-section-number">1.19</span> NAs in Tabelle
+eliminieren bzw. die entsprechenden Zeilen</h2>
+<pre class="r"><code>#airquality
+aq&lt;-airquality[complete.cases(airquality$Ozone),]
+nrow(airquality)</code></pre>
+<pre><code>## [1] 153</code></pre>
+<pre class="r"><code>nrow(aq)</code></pre>
+<pre><code>## [1] 116</code></pre>
+<pre class="r"><code>nrow(na.omit(airquality))</code></pre>
+<pre><code>## [1] 111</code></pre>
+<pre class="r"><code>air_no_na&lt;- airquality[which(rowSums(is.na(airquality)) == 0),]
+airquality[which(rowSums(is.na(airquality)) != 0),]</code></pre>
+<pre><code>##     Ozone Solar.R Wind Temp Month Day
+## 5      NA      NA 14.3   56     5   5
+## 6      28      NA 14.9   66     5   6
+## 10     NA     194  8.6   69     5  10
+## 11      7      NA  6.9   74     5  11
+## 25     NA      66 16.6   57     5  25
+## 26     NA     266 14.9   58     5  26
+## 27     NA      NA  8.0   57     5  27
+## 32     NA     286  8.6   78     6   1
+## 33     NA     287  9.7   74     6   2
+## 34     NA     242 16.1   67     6   3
+## 35     NA     186  9.2   84     6   4
+## 36     NA     220  8.6   85     6   5
+## 37     NA     264 14.3   79     6   6
+## 39     NA     273  6.9   87     6   8
+## 42     NA     259 10.9   93     6  11
+## 43     NA     250  9.2   92     6  12
+## 45     NA     332 13.8   80     6  14
+## 46     NA     322 11.5   79     6  15
+## 52     NA     150  6.3   77     6  21
+## 53     NA      59  1.7   76     6  22
+## 54     NA      91  4.6   76     6  23
+## 55     NA     250  6.3   76     6  24
+## 56     NA     135  8.0   75     6  25
+## 57     NA     127  8.0   78     6  26
+## 58     NA      47 10.3   73     6  27
+## 59     NA      98 11.5   80     6  28
+## 60     NA      31 14.9   77     6  29
+## 61     NA     138  8.0   83     6  30
+## 65     NA     101 10.9   84     7   4
+## 72     NA     139  8.6   82     7  11
+## 75     NA     291 14.9   91     7  14
+## 83     NA     258  9.7   81     7  22
+## 84     NA     295 11.5   82     7  23
+## 96     78      NA  6.9   86     8   4
+## 97     35      NA  7.4   85     8   5
+## 98     66      NA  4.6   87     8   6
+## 102    NA     222  8.6   92     8  10
+## 103    NA     137 11.5   86     8  11
+## 107    NA      64 11.5   79     8  15
+## 115    NA     255 12.6   75     8  23
+## 119    NA     153  5.7   88     8  27
+## 150    NA     145 13.2   77     9  27</code></pre>
+<p>Vergleich aber mit <code>na.omit()</code>.</p>
+<pre class="r"><code>df &lt;- data.frame(col1 = c(1, 2, NA, 4),
+                 col2 = c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, NA),
+                 col3 = c(TRUE, FALSE, TRUE, TRUE))
+df</code></pre>
+<pre><code>##   col1 col2  col3
+## 1    1    A  TRUE
+## 2    2    B FALSE
+## 3   NA    C  TRUE
+## 4    4 &lt;NA&gt;  TRUE</code></pre>
+<pre class="r"><code>na.omit(df)</code></pre>
+<pre><code>##   col1 col2  col3
+## 1    1    A  TRUE
+## 2    2    B FALSE</code></pre>
+<pre class="r"><code>df[complete.cases(df),]</code></pre>
+<pre><code>##   col1 col2  col3
+## 1    1    A  TRUE
+## 2    2    B FALSE</code></pre>
+<pre class="r"><code>df[complete.cases(df$col1),]</code></pre>
+<pre><code>##   col1 col2  col3
+## 1    1    A  TRUE
+## 2    2    B FALSE
+## 4    4 &lt;NA&gt;  TRUE</code></pre>
+<pre class="r"><code>sum(rowSums(is.na(df)) &gt; 0) # Anzahl Zeilen mit NA</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code>sum(is.na(df)) # NAs insgesamt in Tabelle</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code>which(rowSums(is.na(df)) &gt; 0)</code></pre>
+<pre><code>## [1] 3 4</code></pre>
+<pre class="r"><code>df[which(rowSums(is.na(df)) &gt; 0),]</code></pre>
+<pre><code>##   col1 col2 col3
+## 3   NA    C TRUE
+## 4    4 &lt;NA&gt; TRUE</code></pre>
+<pre class="r"><code>df[which(rowSums(is.na(df)) == 0),]</code></pre>
+<pre><code>##   col1 col2  col3
+## 1    1    A  TRUE
+## 2    2    B FALSE</code></pre>
+</div>
+<div id="unique-tabulate-match" class="section level2" number="1.20">
+<h2><span class="header-section-number">1.20</span>
+<code>unique()</code>, <code>tabulate()</code>,
+<code>match()</code></h2>
+<pre class="r"><code>zahlen &lt;- c(3, 2, 1, 7, 7, 6, 6, 6, 7)
+unique(zahlen)</code></pre>
+<pre><code>## [1] 3 2 1 7 6</code></pre>
+<pre class="r"><code>(m &lt;- match(zahlen, unique(zahlen)))</code></pre>
+<pre><code>## [1] 1 2 3 4 4 5 5 5 4</code></pre>
+<pre class="r"><code>(tb &lt;- tabulate(m))</code></pre>
+<pre><code>## [1] 1 1 1 3 3</code></pre>
+<pre class="r"><code>unique(zahlen)[tb == max(tb)]</code></pre>
+<pre><code>## [1] 7 6</code></pre>
+</div>
+<div id="baue-funktion-für-modus" class="section level2" number="1.21">
+<h2><span class="header-section-number">1.21</span> baue Funktion für
+Modus</h2>
+<pre class="r"><code>Modus &lt;- function(x) {
+  tb &lt;- tabulate(match(x, unique(x)))
+  unique(x)[tb == max(tb)]
+}
+Modus(c(3,2,2,1))</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code>Modus(c(3,3,3,2,2,2,1))</code></pre>
+<pre><code>## [1] 3 2</code></pre>
+<pre class="r"><code>Modus(c(&quot;AA&quot;, &quot;AA&quot;, &quot;BB&quot;,&quot;BB&quot;,&quot;CC&quot;, &quot;CC&quot;, &quot;DD&quot;))</code></pre>
+<pre><code>## [1] &quot;AA&quot; &quot;BB&quot; &quot;CC&quot;</code></pre>
+</div>
+<div id="sapply-anwendung-in-tabellen" class="section level2"
+number="1.22">
+<h2><span class="header-section-number">1.22</span> sapply-Anwendung in
+Tabellen</h2>
+<pre class="r"><code>Spalten_num&lt;-colnames(iris)[which(sapply(iris, is.numeric))]
+head(iris[Spalten_num])</code></pre>
+<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width
+## 1          5.1         3.5          1.4         0.2
+## 2          4.9         3.0          1.4         0.2
+## 3          4.7         3.2          1.3         0.2
+## 4          4.6         3.1          1.5         0.2
+## 5          5.0         3.6          1.4         0.2
+## 6          5.4         3.9          1.7         0.4</code></pre>
+<pre class="r"><code>sapply(iris[Spalten_num], mean)</code></pre>
+<pre><code>## Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+##     5.843333     3.057333     3.758000     1.199333</code></pre>
+<pre class="r"><code>sapply(iris[Spalten_num], median)</code></pre>
+<pre><code>## Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+##         5.80         3.00         4.35         1.30</code></pre>
+<pre class="r"><code>sapply(iris[Spalten_num], Modus)</code></pre>
+<pre><code>## $Sepal.Length
+## [1] 5
+## 
+## $Sepal.Width
+## [1] 3
+## 
+## $Petal.Length
+## [1] 1.4 1.5
+## 
+## $Petal.Width
+## [1] 0.2</code></pre>
+</div>
+<div id="erstelle-matrix-mit-quersummen-aus-iris10"
+class="section level2" number="1.23">
+<h2><span class="header-section-number">1.23</span> Erstelle Matrix mit
+Quersummen aus <code>iris</code>*10</h2>
+<pre class="r"><code>m&lt;-matrix(numeric(600), nrow=150)
+for (i in 1:4){
+  m[,i] &lt;- sapply(iris[,i]*10, Quersumme)
+}
+head(m)</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]    6    8    5    2
+## [2,]   13    3    5    2
+## [3,]   11    5    4    2
+## [4,]   10    4    6    2
+## [5,]    5    9    5    2
+## [6,]    9   12    8    4</code></pre>
+</div>
+<div id="verteilungsfunktion-mit-ecdf-und-stepfun"
+class="section level2" number="1.24">
+<h2><span class="header-section-number">1.24</span> Verteilungsfunktion
+mit <code>ecdf</code> und <code>stepfun</code></h2>
+<pre class="r"><code>x&lt;-c(1,1,2,2,2,2,4,4,4,5)
+table(x)</code></pre>
+<pre><code>## x
+## 1 2 4 5 
+## 2 4 3 1</code></pre>
+<pre class="r"><code>table(x)/10</code></pre>
+<pre><code>## x
+##   1   2   4   5 
+## 0.2 0.4 0.3 0.1</code></pre>
+<pre class="r"><code>cumsum(table(x)/10)</code></pre>
+<pre><code>##   1   2   4   5 
+## 0.2 0.6 0.9 1.0</code></pre>
+<pre class="r"><code>plot(ecdf(x))</code></pre>
+<p><img src="index_4_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<pre class="r"><code>y &lt;- c(0, cumsum(table(x))/length(x))
+f &lt;- stepfun(x = unique(sort(x)), y = y)
+plot(f, main = &quot;Kumulierte Verteilungsfunktion&quot;)</code></pre>
+<p><img src="index_4_files/figure-html/unnamed-chunk-31-2.png" width="672" /></p>
+</div>
+<div id="matrix-ertellen" class="section level2" number="1.25">
+<h2><span class="header-section-number">1.25</span> Matrix ertellen</h2>
+<pre class="r"><code>a&lt;- seq(from = 8, to = 1)
+b&lt;- seq(from = 0, length = 8, by = 2)
+c&lt;- rep(1:2, 4)
+d&lt;- rep(x = c(5,10), times = c(3, 5))
+e&lt;- rep(x = 1:3, length.out = 8)
+f&lt;- rep(c(-1, 1), each = 4)
+Mat &lt;- matrix(c(a, b, c, d, e, f), nrow = 8)
+Mat</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6]
+## [1,]    8    0    1    5    1   -1
+## [2,]    7    2    2    5    2   -1
+## [3,]    6    4    1    5    3   -1
+## [4,]    5    6    2   10    1   -1
+## [5,]    4    8    1   10    2    1
+## [6,]    3   10    2   10    3    1
+## [7,]    2   12    1   10    1    1
+## [8,]    1   14    2   10    2    1</code></pre>
+<pre class="r"><code>k = c()
+for (i in 1:ncol(Mat)) {
+  k = append(k, sum(Mat[,i]))
+}
+k</code></pre>
+<pre><code>## [1] 36 56 12 65 15  0</code></pre>
+</div>
+<div id="mengen---und-oder.-which-which.maxmin-all-any."
+class="section level2" number="1.26">
+<h2><span class="header-section-number">1.26</span> Mengen,
+<code>&amp;</code>, <code>|</code> - und, oder. <code>which</code>,
+<code>which.max/min</code>, <code>all</code>, <code>any</code>.</h2>
+<pre class="r"><code>x = c(3,4,5,3,4,2,3,7)
+which(x==3)</code></pre>
+<pre><code>## [1] 1 4 7</code></pre>
+<pre class="r"><code>which.min(x)</code></pre>
+<pre><code>## [1] 6</code></pre>
+<pre class="r"><code>which.max(x)</code></pre>
+<pre><code>## [1] 8</code></pre>
+<pre class="r"><code>(x[which.max(x)] - x[which.min(x)]) == diff(range(x))</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>x[x &gt; 4 | x &lt; 3]</code></pre>
+<pre><code>## [1] 5 2 7</code></pre>
+<pre class="r"><code>sum(x &gt; 3 &amp; x &lt; 7)</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>any(x &gt; 3 &amp; x &lt; 7)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>all(x &gt; 3 &amp; x &lt; 7)</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+</div>
+<div id="ddply-in-paket-plyr" class="section level2" number="1.27">
+<h2><span class="header-section-number">1.27</span> <code>ddply()</code>
+in Paket plyr</h2>
+<pre class="r"><code>library(plyr)
+gdURL &lt;- &quot;http://www.stat.ubc.ca/~jenny/notOcto/STAT545A/examples/gapminder/data/gapminderDataFiveYear.txt&quot;
+gDat &lt;- read.delim(file = gdURL)
+dim(gDat)</code></pre>
+<pre><code>## [1] 1704    6</code></pre>
+<pre class="r"><code>head(gDat)</code></pre>
+<pre><code>##       country year      pop continent lifeExp gdpPercap
+## 1 Afghanistan 1952  8425333      Asia  28.801  779.4453
+## 2 Afghanistan 1957  9240934      Asia  30.332  820.8530
+## 3 Afghanistan 1962 10267083      Asia  31.997  853.1007
+## 4 Afghanistan 1967 11537966      Asia  34.020  836.1971
+## 5 Afghanistan 1972 13079460      Asia  36.088  739.9811
+## 6 Afghanistan 1977 14880372      Asia  38.438  786.1134</code></pre>
+<pre class="r"><code>(maxLeByCont &lt;- ddply(gDat, ~ continent, summarize, maxLifeExp = max(lifeExp)))</code></pre>
+<pre><code>##   continent maxLifeExp
+## 1    Africa     76.442
+## 2  Americas     80.653
+## 3      Asia     82.603
+## 4    Europe     81.757
+## 5   Oceania     81.235</code></pre>
+<pre class="r"><code>ddply(gDat, ~continent, summarize, nUniqCountries = length(unique(country)))</code></pre>
+<pre><code>##   continent nUniqCountries
+## 1    Africa             52
+## 2  Americas             25
+## 3      Asia             33
+## 4    Europe             30
+## 5   Oceania              2</code></pre>
+<pre class="r"><code>ddply(gDat, ~ continent, summarize,
+      minLifeExp = min(lifeExp), maxLifeExp = max(lifeExp),
+      medGdpPercap = median(gdpPercap))</code></pre>
+<pre><code>##   continent minLifeExp maxLifeExp medGdpPercap
+## 1    Africa     23.599     76.442     1192.138
+## 2  Americas     37.579     80.653     5465.510
+## 3      Asia     28.801     82.603     2646.787
+## 4    Europe     43.585     81.757    12081.749
+## 5   Oceania     69.120     81.235    17983.304</code></pre>
+<pre class="r"><code>library(lattice)
+jCountry &lt;- &quot;France&quot;  # pick, but do not hard wire, an example
+(jDat &lt;- subset(gDat, country == jCountry))  # temporary measure!</code></pre>
+<pre><code>##     country year      pop continent lifeExp gdpPercap
+## 529  France 1952 42459667    Europe  67.410  7029.809
+## 530  France 1957 44310863    Europe  68.930  8662.835
+## 531  France 1962 47124000    Europe  70.510 10560.486
+## 532  France 1967 49569000    Europe  71.550 12999.918
+## 533  France 1972 51732000    Europe  72.380 16107.192
+## 534  France 1977 53165019    Europe  73.830 18292.635
+## 535  France 1982 54433565    Europe  74.890 20293.897
+## 536  France 1987 55630100    Europe  76.340 22066.442
+## 537  France 1992 57374179    Europe  77.460 24703.796
+## 538  France 1997 58623428    Europe  78.640 25889.785
+## 539  France 2002 59925035    Europe  79.590 28926.032
+## 540  France 2007 61083916    Europe  80.657 30470.017</code></pre>
+<pre class="r"><code>xyplot(lifeExp ~ year, jDat, type = c(&quot;p&quot;, &quot;r&quot;))  # always plot the data</code></pre>
+<p><img src="index_4_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<pre class="r"><code>jFit &lt;- lm(lifeExp ~ year, jDat)
+summary(jFit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = lifeExp ~ year, data = jDat)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.38013 -0.13894  0.01235  0.14295  0.33486 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -397.76460    7.28533  -54.60 1.03e-13 ***
+## year           0.23850    0.00368   64.81 1.86e-14 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.22 on 10 degrees of freedom
+## Multiple R-squared:  0.9976, Adjusted R-squared:  0.9974 
+## F-statistic:  4200 on 1 and 10 DF,  p-value: 1.863e-14</code></pre>
+<pre class="r"><code>(yearMin &lt;- min(gDat$year))</code></pre>
+<pre><code>## [1] 1952</code></pre>
+<pre class="r"><code>jFit &lt;- lm(lifeExp ~ I(year - yearMin), jDat)
+summary(jFit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = lifeExp ~ I(year - yearMin), data = jDat)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.38013 -0.13894  0.01235  0.14295  0.33486 
+## 
+## Coefficients:
+##                   Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)       67.79013    0.11949  567.33  &lt; 2e-16 ***
+## I(year - yearMin)  0.23850    0.00368   64.81 1.86e-14 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.22 on 10 degrees of freedom
+## Multiple R-squared:  0.9976, Adjusted R-squared:  0.9974 
+## F-statistic:  4200 on 1 and 10 DF,  p-value: 1.863e-14</code></pre>
+<pre class="r"><code>#str(jFit)
+names(jFit)</code></pre>
+<pre><code>##  [1] &quot;coefficients&quot;  &quot;residuals&quot;     &quot;effects&quot;       &quot;rank&quot;         
+##  [5] &quot;fitted.values&quot; &quot;assign&quot;        &quot;qr&quot;            &quot;df.residual&quot;  
+##  [9] &quot;xlevels&quot;       &quot;call&quot;          &quot;terms&quot;         &quot;model&quot;</code></pre>
+<pre class="r"><code>jFun &lt;- function(x) {
+    estCoefs &lt;- coef(lm(lifeExp ~ I(year - yearMin), x))
+    names(estCoefs) &lt;- c(&quot;intercept&quot;, &quot;slope&quot;)
+    return(estCoefs)
+}
+jFun(jDat)</code></pre>
+<pre><code>##  intercept      slope 
+## 67.7901282  0.2385014</code></pre>
+<pre class="r"><code>jFun(subset(gDat, country == &quot;Canada&quot;))</code></pre>
+<pre><code>##  intercept      slope 
+## 68.8838462  0.2188692</code></pre>
+<pre class="r"><code>jCoefs &lt;- ddply(gDat, ~country, jFun)
+str(jCoefs)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    142 obs. of  3 variables:
+##  $ country  : chr  &quot;Afghanistan&quot; &quot;Albania&quot; &quot;Algeria&quot; &quot;Angola&quot; ...
+##  $ intercept: num  29.9 59.2 43.4 32.1 62.7 ...
+##  $ slope    : num  0.275 0.335 0.569 0.209 0.232 ...</code></pre>
+<pre class="r"><code>tail(jCoefs)</code></pre>
+<pre><code>##                country intercept       slope
+## 137          Venezuela  57.51332  0.32972168
+## 138            Vietnam  39.01008  0.67161538
+## 139 West Bank and Gaza  43.79840  0.60110070
+## 140        Yemen, Rep.  30.13028  0.60545944
+## 141             Zambia  47.65803 -0.06042517
+## 142           Zimbabwe  55.22124 -0.09302098</code></pre>
+</div>
+</div>
+<div id="histogramm" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Histogramm</h1>
+<p>Baue dir einen einfachen Datensatz. Eine numerische Variable und
+einen Faktor. Wir erstellen ein einfaches Histogramm mit Bandbreite 5,
+und fügen eine vertikale Linie hinzu(mean).</p>
+<pre class="r"><code>df &lt;- data.frame(
+  sex = factor(rep(c(&quot;F&quot;, &quot;M&quot;), each = 50)), weight = c(rnorm(50, mean = 60, sd = 10), rnorm(50, mean = 80,   sd = 15))
+  )
+head(df)</code></pre>
+<pre><code>##   sex   weight
+## 1   F 54.88396
+## 2   F 62.36938
+## 3   F 54.58411
+## 4   F 72.19228
+## 5   F 61.74136
+## 6   F 53.84732</code></pre>
+<pre class="r"><code>tail(df)</code></pre>
+<pre><code>##     sex   weight
+## 95    M 75.72645
+## 96    M 69.79557
+## 97    M 65.53920
+## 98    M 79.22294
+## 99    M 91.11792
+## 100   M 83.40278</code></pre>
+<pre class="r"><code>pp &lt;-ggplot(df, aes(x = weight)) +
+    geom_histogram(binwidth = 5, color = &quot;red&quot;, fill =   &quot;grey&quot;)
+pp+ geom_vline(aes(xintercept=mean(weight)),
+            color=&quot;yellow&quot;, linetype=&quot;dashed&quot;, size=2)</code></pre>
+<pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+## ℹ Please use `linewidth` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.</code></pre>
+<p><img src="index_4_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
+<p>Das ganze mit der Pipe.</p>
+<pre class="r"><code>df|&gt;
+  ggplot(aes(x = weight)) +
+  geom_histogram(binwidth = 5, color = &quot;red&quot;, fill =     &quot;grey&quot;)</code></pre>
+<p><img src="index_4_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
+<p>Wir fügen dem Histogramm eine Dichtefunktion hinzu. Auf der y-Achse
+steht jetzt auch die Dichte. Die Dichte ist natürlich transparent.</p>
+<pre class="r"><code>ggplot(df, aes(x=weight)) + 
+ geom_histogram(aes(y=..density..), colour=&quot;black&quot;, fill=&quot;white&quot;)+
+ geom_density(alpha=.2, fill=&quot;#FF6666&quot;)</code></pre>
+<pre><code>## Warning: The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
+## ℹ Please use `after_stat(density)` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="index_4_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
+<p>Durch ´breaks()` werden die Rechtecke manuell gesetzt.</p>
+<pre class="r"><code>max(df[,2])</code></pre>
+<pre><code>## [1] 102.9482</code></pre>
+<pre class="r"><code>min(df[,2])</code></pre>
+<pre><code>## [1] 41.93107</code></pre>
+<pre class="r"><code>table(cut(df[,2], breaks = c(40, 60, 100, 110)))</code></pre>
+<pre><code>## 
+##   (40,60]  (60,100] (100,110] 
+##        32        66         2</code></pre>
+<pre class="r"><code>ggplot(df, aes(x=weight)) + 
+ geom_histogram(aes(y=..density..), colour=&quot;black&quot;, fill=&quot;white&quot;, breaks = c(40, 60, 100, 110))</code></pre>
+<p><img src="index_4_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
+<p>Einmal gestapelt und nicht (identity)</p>
+<pre class="r"><code>library(plyr)
+(mu &lt;- ddply(df, &quot;sex&quot;, summarise, grp.mean=mean(weight)))</code></pre>
+<pre><code>##   sex grp.mean
+## 1   F 60.05207
+## 2   M 76.36904</code></pre>
+<pre class="r"><code>ggplot(df, aes(x=weight, color=sex)) +
+  geom_histogram(fill=&quot;white&quot;)</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="index_4_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
+<pre class="r"><code># Overlaid histograms
+ggplot(df, aes(x=weight, color=sex)) +
+  geom_histogram(fill=&quot;white&quot;, alpha=0.5, position=&quot;identity&quot;)</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="index_4_files/figure-html/unnamed-chunk-43-2.png" width="672" /></p>
+<pre class="r"><code># füge mean Linien hinzu
+p&lt;-ggplot(df, aes(x=weight, color=sex)) +
+  geom_histogram(fill=&quot;white&quot;, position=&quot;dodge&quot;)+
+  geom_vline(data=mu, aes(xintercept=grp.mean, color=sex),
+             linetype=&quot;dashed&quot;)+
+  theme(legend.position=&quot;top&quot;)
+p</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="index_4_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
+<div id="histogramme-getrennt-nach-geschlecht" class="section level2"
+number="2.1">
+<h2><span class="header-section-number">2.1</span> 2 Histogramme,
+getrennt nach Geschlecht</h2>
+<p>Farblich unterschiedlich und mit Mean sowie Dichte.</p>
+<pre class="r"><code># Change line colors by groups
+ggplot(df, aes(x=weight, color=sex, fill=sex)) +
+geom_histogram(aes(y=..density..), position=&quot;identity&quot;, alpha=0.3)+
+geom_density(alpha=0.4)+
+geom_vline(data=mu, aes(xintercept=grp.mean, color=sex),
+           linetype=&quot;dashed&quot;)+
+scale_color_manual(values=c(&quot;#999999&quot;, &quot;#E69F00&quot;, &quot;#56B4E9&quot;))+
+scale_fill_manual(values=c(&quot;#999999&quot;, &quot;#E69F00&quot;, &quot;#56B4E9&quot;))+
+labs(title=&quot;Gewicht Histogramm Plot&quot;,x=&quot;Gewicht(kg)&quot;, y = &quot;Dichte&quot;)+
+theme_classic()</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="index_4_files/figure-html/unnamed-chunk-45-1.png" width="672" /></p>
+</div>
+<div
+id="paket-sjmisc-für-häufigkeitstabellen-mit-frq-ersetzen-durch-recode"
+class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Paket
+<code>sjmisc</code> für Häufigkeitstabellen mit <code>frq()</code>,
+Ersetzen durch <code>recode()</code></h2>
+<pre class="r"><code>library(sjmisc)</code></pre>
+<pre><code>## Warning: Paket &#39;sjmisc&#39; wurde unter R Version 4.2.3 erstellt</code></pre>
+<pre class="r"><code>library(plyr)
+library(car)</code></pre>
+<pre><code>## Lade nötiges Paket: carData</code></pre>
+<pre class="r"><code>library(dplyr)</code></pre>
+<pre><code>## Warning: Paket &#39;dplyr&#39; wurde unter R Version 4.2.3 erstellt</code></pre>
+<pre><code>## 
+## Attache Paket: &#39;dplyr&#39;</code></pre>
+<pre><code>## Das folgende Objekt ist maskiert &#39;package:car&#39;:
+## 
+##     recode</code></pre>
+<pre><code>## Die folgenden Objekte sind maskiert von &#39;package:plyr&#39;:
+## 
+##     arrange, count, desc, failwith, id, mutate, rename, summarise,
+##     summarize</code></pre>
+<pre><code>## Die folgenden Objekte sind maskiert von &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## Die folgenden Objekte sind maskiert von &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>(ddf &lt;- data.frame(Konsum = c(&quot;Nie&quot;, &quot;Nie&quot;, &quot;Nie&quot;, &quot;Nie&quot;, &quot;Nie&quot;, &quot;Nie&quot;, &quot;Selten&quot;, &quot;Selten&quot;, &quot;Selten&quot;, &quot;Selten&quot;, &quot;Selten&quot;, &quot;Selten&quot;, &quot;Selten&quot;, &quot;R&quot;, &quot;R&quot;, &quot;R&quot;, &quot;R&quot;, &quot;R&quot;, &quot;R&quot;, &quot;R&quot;), Behandlung = c(rep(c(&quot;J&quot;, &quot;N&quot;), length.out = 15), rep(&quot;J&quot;, 5)), zahlen = rep(c(1,3,5), length.out = 20)))</code></pre>
+<pre><code>##    Konsum Behandlung zahlen
+## 1     Nie          J      1
+## 2     Nie          N      3
+## 3     Nie          J      5
+## 4     Nie          N      1
+## 5     Nie          J      3
+## 6     Nie          N      5
+## 7  Selten          J      1
+## 8  Selten          N      3
+## 9  Selten          J      5
+## 10 Selten          N      1
+## 11 Selten          J      3
+## 12 Selten          N      5
+## 13 Selten          J      1
+## 14      R          N      3
+## 15      R          J      5
+## 16      R          J      1
+## 17      R          J      3
+## 18      R          J      5
+## 19      R          J      1
+## 20      R          J      3</code></pre>
+<pre class="r"><code>frq(ddf, Konsum)</code></pre>
+<pre><code>## Konsum &lt;character&gt; 
+## # total N=20 valid N=20 mean=2.05 sd=0.83
+## 
+## Value  | N | Raw % | Valid % | Cum. %
+## -------------------------------------
+## Nie    | 6 |    30 |      30 |     30
+## R      | 7 |    35 |      35 |     65
+## Selten | 7 |    35 |      35 |    100
+## &lt;NA&gt;   | 0 |     0 |    &lt;NA&gt; |   &lt;NA&gt;</code></pre>
+<pre class="r"><code>(y_mean_ABC &lt;- ddply(ddf, ~ Konsum, summarize, y_mean = mean(zahlen)))</code></pre>
+<pre><code>##   Konsum   y_mean
+## 1    Nie 3.000000
+## 2      R 3.000000
+## 3 Selten 2.714286</code></pre>
+<pre class="r"><code>ddf[,2] &lt;- as.factor(rep(c(&quot;A&quot;,&quot;B&quot;), each = 10))
+(ddf &lt;- ddf|&gt;
+  mutate(Behandlung = recode(Behandlung, &quot;A&quot;= 1, &quot;B&quot; = 2)))</code></pre>
+<pre><code>##    Konsum Behandlung zahlen
+## 1     Nie          1      1
+## 2     Nie          1      3
+## 3     Nie          1      5
+## 4     Nie          1      1
+## 5     Nie          1      3
+## 6     Nie          1      5
+## 7  Selten          1      1
+## 8  Selten          1      3
+## 9  Selten          1      5
+## 10 Selten          1      1
+## 11 Selten          2      3
+## 12 Selten          2      5
+## 13 Selten          2      1
+## 14      R          2      3
+## 15      R          2      5
+## 16      R          2      1
+## 17      R          2      3
+## 18      R          2      5
+## 19      R          2      1
+## 20      R          2      3</code></pre>
+<pre class="r"><code>frq(ddf, Behandlung)</code></pre>
+<pre><code>## Behandlung &lt;numeric&gt; 
+## # total N=20 valid N=20 mean=1.50 sd=0.51
+## 
+## Value |  N | Raw % | Valid % | Cum. %
+## -------------------------------------
+##     1 | 10 |    50 |      50 |     50
+##     2 | 10 |    50 |      50 |    100
+##  &lt;NA&gt; |  0 |     0 |    &lt;NA&gt; |   &lt;NA&gt;</code></pre>
+</div>
+<div id="nominalskala-kreuztabelle-data.table-ddply"
+class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Nominalskala,
+Kreuztabelle, <code>data.table()</code>, <code>ddply()</code></h2>
+<pre class="r"><code>library(data.table)</code></pre>
+<pre><code>## 
+## Attache Paket: &#39;data.table&#39;</code></pre>
+<pre><code>## Die folgenden Objekte sind maskiert von &#39;package:dplyr&#39;:
+## 
+##     between, first, last</code></pre>
+<pre class="r"><code>library(sjPlot)</code></pre>
+<pre><code>## Warning: Paket &#39;sjPlot&#39; wurde unter R Version 4.2.3 erstellt</code></pre>
+<pre class="r"><code>(ddf &lt;- data.frame(Konsum = c(&quot;Nie&quot;, &quot;Nie&quot;, &quot;Nie&quot;, &quot;Nie&quot;, &quot;Nie&quot;, &quot;Nie&quot;, &quot;Selten&quot;, &quot;Selten&quot;, &quot;Selten&quot;, &quot;Selten&quot;, &quot;Selten&quot;, &quot;Selten&quot;, &quot;Selten&quot;, &quot;R&quot;, &quot;R&quot;, &quot;R&quot;, &quot;R&quot;, &quot;R&quot;, &quot;R&quot;, &quot;R&quot;), Behandlung = c(rep(c(&quot;J&quot;, &quot;N&quot;), length.out = 15), rep(&quot;J&quot;, 5))))</code></pre>
+<pre><code>##    Konsum Behandlung
+## 1     Nie          J
+## 2     Nie          N
+## 3     Nie          J
+## 4     Nie          N
+## 5     Nie          J
+## 6     Nie          N
+## 7  Selten          J
+## 8  Selten          N
+## 9  Selten          J
+## 10 Selten          N
+## 11 Selten          J
+## 12 Selten          N
+## 13 Selten          J
+## 14      R          N
+## 15      R          J
+## 16      R          J
+## 17      R          J
+## 18      R          J
+## 19      R          J
+## 20      R          J</code></pre>
+<pre class="r"><code>sjt.xtab(ddf$Konsum, ddf$Behandlung, show.exp = T, show.legend = T)</code></pre>
+<table style="border-collapse:collapse; border:none;">
+<tr>
+<th style="border-top:double; text-align:center; font-style:italic; font-weight:normal; border-bottom:1px solid;" rowspan="2">
+Konsum
+</th>
+<th style="border-top:double; text-align:center; font-style:italic; font-weight:normal;" colspan="2">
+Behandlung
+</th>
+<th style="border-top:double; text-align:center; font-style:italic; font-weight:normal; font-weight:bolder; font-style:italic; border-bottom:1px solid; " rowspan="2">
+Total
+</th>
+</tr>
+<tr>
+<td style="border-bottom:1px solid; text-align:center; padding:0.2cm;">
+J
+</td>
+<td style="border-bottom:1px solid; text-align:center; padding:0.2cm;">
+N
+</td>
+</tr>
+<tr>
+<td style="padding:0.2cm;  text-align:left; vertical-align:middle;">
+Nie
+</td>
+<td style="padding:0.2cm; text-align:center; ">
+<span style="color:black;">3</span><br><span
+style="color:#339999;">4</span>
+</td>
+<td style="padding:0.2cm; text-align:center; ">
+<span style="color:black;">3</span><br><span
+style="color:#339999;">2</span>
+</td>
+<td style="padding:0.2cm; text-align:center;  ">
+<span style="color:black;">6</span><br><span
+style="color:#339999;">6</span>
+</td>
+</tr>
+<tr>
+<td style="padding:0.2cm;  text-align:left; vertical-align:middle;">
+R
+</td>
+<td style="padding:0.2cm; text-align:center; ">
+<span style="color:black;">6</span><br><span
+style="color:#339999;">5</span>
+</td>
+<td style="padding:0.2cm; text-align:center; ">
+<span style="color:black;">1</span><br><span
+style="color:#339999;">2</span>
+</td>
+<td style="padding:0.2cm; text-align:center;  ">
+<span style="color:black;">7</span><br><span
+style="color:#339999;">7</span>
+</td>
+</tr>
+<tr>
+<td style="padding:0.2cm;  text-align:left; vertical-align:middle;">
+Selten
+</td>
+<td style="padding:0.2cm; text-align:center; ">
+<span style="color:black;">4</span><br><span
+style="color:#339999;">5</span>
+</td>
+<td style="padding:0.2cm; text-align:center; ">
+<span style="color:black;">3</span><br><span
+style="color:#339999;">2</span>
+</td>
+<td style="padding:0.2cm; text-align:center;  ">
+<span style="color:black;">7</span><br><span
+style="color:#339999;">7</span>
+</td>
+</tr>
+<tr>
+<td style="padding:0.2cm;  border-bottom:double; font-weight:bolder; font-style:italic; text-align:left; vertical-align:middle;">
+Total
+</td>
+<td style="padding:0.2cm; text-align:center;   border-bottom:double;">
+<span style="color:black;">13</span><br><span
+style="color:#339999;">13</span>
+</td>
+<td style="padding:0.2cm; text-align:center;   border-bottom:double;">
+<span style="color:black;">7</span><br><span
+style="color:#339999;">7</span>
+</td>
+<td style="padding:0.2cm; text-align:center;   border-bottom:double;">
+<span style="color:black;">20</span><br><span
+style="color:#339999;">20</span>
+</td>
+</tr>
+<td style="text-align:right; font-size:0.9em; font-style:italic; padding:0.2cm;" colspan="4">
+χ<sup>2</sup>=2.104 · df=2 · Cramer’s V=0.324 · Fisher’s p=0.491
+</td>
+</tr>
+</table>
+<p>
+<span style="color:black;">observed values</span><br> <span
+style="color:#339999;">expected values</span><br>
+</p>
+<pre class="r"><code>table(ddf$Konsum, ddf$Behandlung)</code></pre>
+<pre><code>##         
+##          J N
+##   Nie    3 3
+##   R      6 1
+##   Selten 4 3</code></pre>
+<pre class="r"><code>ddf_t &lt;- as.data.table(ddf)
+ddf_t &lt;- ddf_t |&gt; 
+  mutate(Sample = sample(1:5, 20, replace = T))
+ddf_t[, mean(Sample)]</code></pre>
+<pre><code>## [1] 2.6</code></pre>
+<pre class="r"><code>ddf_t[, mean(Sample), by = Konsum]</code></pre>
+<pre><code>##    Konsum       V1
+## 1:    Nie 3.000000
+## 2: Selten 2.714286
+## 3:      R 2.142857</code></pre>
+<pre class="r"><code>ddf_t[Behandlung == &quot;J&quot;, mean(Sample)]</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code>ddply(ddf_t, ~ Behandlung, summarize, DSNT = mean(as.numeric(Sample)))</code></pre>
+<pre><code>##   Behandlung     DSNT
+## 1          J 2.000000
+## 2          N 3.714286</code></pre>
+</div>
+<div id="spalten" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Spalten</h2>
+<pre class="r"><code>library(dplyr)
+library(car)
+head(dplyr::storms)</code></pre>
+<pre><code>## # A tibble: 6 × 13
+##   name   year month   day  hour   lat  long status       category  wind pressure
+##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;           &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;
+## 1 Amy    1975     6    27     0  27.5 -79   tropical de…       NA    25     1013
+## 2 Amy    1975     6    27     6  28.5 -79   tropical de…       NA    25     1013
+## 3 Amy    1975     6    27    12  29.5 -79   tropical de…       NA    25     1013
+## 4 Amy    1975     6    27    18  30.5 -79   tropical de…       NA    25     1013
+## 5 Amy    1975     6    28     0  31.5 -78.8 tropical de…       NA    25     1012
+## 6 Amy    1975     6    28     6  32.4 -78.7 tropical de…       NA    25     1012
+## # ℹ 2 more variables: tropicalstorm_force_diameter &lt;int&gt;,
+## #   hurricane_force_diameter &lt;int&gt;</code></pre>
+<pre class="r"><code>storm &lt;- storms
+storm$category[is.na(storm$category)] &lt;- 9999
+storm</code></pre>
+<pre><code>## # A tibble: 19,066 × 13
+##    name   year month   day  hour   lat  long status      category  wind pressure
+##    &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;          &lt;dbl&gt; &lt;int&gt;    &lt;int&gt;
+##  1 Amy    1975     6    27     0  27.5 -79   tropical d…     9999    25     1013
+##  2 Amy    1975     6    27     6  28.5 -79   tropical d…     9999    25     1013
+##  3 Amy    1975     6    27    12  29.5 -79   tropical d…     9999    25     1013
+##  4 Amy    1975     6    27    18  30.5 -79   tropical d…     9999    25     1013
+##  5 Amy    1975     6    28     0  31.5 -78.8 tropical d…     9999    25     1012
+##  6 Amy    1975     6    28     6  32.4 -78.7 tropical d…     9999    25     1012
+##  7 Amy    1975     6    28    12  33.3 -78   tropical d…     9999    25     1011
+##  8 Amy    1975     6    28    18  34   -77   tropical d…     9999    30     1006
+##  9 Amy    1975     6    29     0  34.4 -75.8 tropical s…     9999    35     1004
+## 10 Amy    1975     6    29     6  34   -74.8 tropical s…     9999    40     1002
+## # ℹ 19,056 more rows
+## # ℹ 2 more variables: tropicalstorm_force_diameter &lt;int&gt;,
+## #   hurricane_force_diameter &lt;int&gt;</code></pre>
+<pre class="r"><code>recode_factor(iris$Species, &quot;versicolor&quot; = &quot;b&quot;)</code></pre>
+<pre><code>##   [1] setosa    setosa    setosa    setosa    setosa    setosa    setosa   
+##   [8] setosa    setosa    setosa    setosa    setosa    setosa    setosa   
+##  [15] setosa    setosa    setosa    setosa    setosa    setosa    setosa   
+##  [22] setosa    setosa    setosa    setosa    setosa    setosa    setosa   
+##  [29] setosa    setosa    setosa    setosa    setosa    setosa    setosa   
+##  [36] setosa    setosa    setosa    setosa    setosa    setosa    setosa   
+##  [43] setosa    setosa    setosa    setosa    setosa    setosa    setosa   
+##  [50] setosa    b         b         b         b         b         b        
+##  [57] b         b         b         b         b         b         b        
+##  [64] b         b         b         b         b         b         b        
+##  [71] b         b         b         b         b         b         b        
+##  [78] b         b         b         b         b         b         b        
+##  [85] b         b         b         b         b         b         b        
+##  [92] b         b         b         b         b         b         b        
+##  [99] b         b         virginica virginica virginica virginica virginica
+## [106] virginica virginica virginica virginica virginica virginica virginica
+## [113] virginica virginica virginica virginica virginica virginica virginica
+## [120] virginica virginica virginica virginica virginica virginica virginica
+## [127] virginica virginica virginica virginica virginica virginica virginica
+## [134] virginica virginica virginica virginica virginica virginica virginica
+## [141] virginica virginica virginica virginica virginica virginica virginica
+## [148] virginica virginica virginica
+## Levels: b setosa virginica</code></pre>
+<pre class="r"><code>ddf_t |&gt;
+  mutate(neu = if_else(Behandlung == &quot;J&quot;, 1, 0))</code></pre>
+<pre><code>##     Konsum Behandlung Sample neu
+##  1:    Nie          J      1   1
+##  2:    Nie          N      5   0
+##  3:    Nie          J      2   1
+##  4:    Nie          N      3   0
+##  5:    Nie          J      5   1
+##  6:    Nie          N      2   0
+##  7: Selten          J      2   1
+##  8: Selten          N      5   0
+##  9: Selten          J      1   1
+## 10: Selten          N      4   0
+## 11: Selten          J      1   1
+## 12: Selten          N      3   0
+## 13: Selten          J      3   1
+## 14:      R          N      4   0
+## 15:      R          J      1   1
+## 16:      R          J      1   1
+## 17:      R          J      5   1
+## 18:      R          J      1   1
+## 19:      R          J      2   1
+## 20:      R          J      1   1</code></pre>
+<pre class="r"><code>ddf_t |&gt;
+  mutate(neu = if_else(Konsum == &quot;Nie&quot;, 1, if_else(Konsum == &quot;Selten&quot;, 2, 0)))</code></pre>
+<pre><code>##     Konsum Behandlung Sample neu
+##  1:    Nie          J      1   1
+##  2:    Nie          N      5   1
+##  3:    Nie          J      2   1
+##  4:    Nie          N      3   1
+##  5:    Nie          J      5   1
+##  6:    Nie          N      2   1
+##  7: Selten          J      2   2
+##  8: Selten          N      5   2
+##  9: Selten          J      1   2
+## 10: Selten          N      4   2
+## 11: Selten          J      1   2
+## 12: Selten          N      3   2
+## 13: Selten          J      3   2
+## 14:      R          N      4   0
+## 15:      R          J      1   0
+## 16:      R          J      1   0
+## 17:      R          J      5   0
+## 18:      R          J      1   0
+## 19:      R          J      2   0
+## 20:      R          J      1   0</code></pre>
+<pre class="r"><code>count(ddf_t, vars = &quot;Konsum&quot;)</code></pre>
+<pre><code>##      vars  n
+## 1: Konsum 20</code></pre>
+<pre class="r"><code>ddf_t |&gt;
+  mutate(recode = if_else(Konsum == &quot;Nie&quot;, 33, 0))</code></pre>
+<pre><code>##     Konsum Behandlung Sample recode
+##  1:    Nie          J      1     33
+##  2:    Nie          N      5     33
+##  3:    Nie          J      2     33
+##  4:    Nie          N      3     33
+##  5:    Nie          J      5     33
+##  6:    Nie          N      2     33
+##  7: Selten          J      2      0
+##  8: Selten          N      5      0
+##  9: Selten          J      1      0
+## 10: Selten          N      4      0
+## 11: Selten          J      1      0
+## 12: Selten          N      3      0
+## 13: Selten          J      3      0
+## 14:      R          N      4      0
+## 15:      R          J      1      0
+## 16:      R          J      1      0
+## 17:      R          J      5      0
+## 18:      R          J      1      0
+## 19:      R          J      2      0
+## 20:      R          J      1      0</code></pre>
+</div>
+</div>
+<div id="flights-datensatz" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> flights Datensatz</h1>
+<pre class="r"><code>library(nycflights13)</code></pre>
+<pre><code>## Warning: Paket &#39;nycflights13&#39; wurde unter R Version 4.2.3 erstellt</code></pre>
+<pre class="r"><code>filter_severe &lt;- function() {
+  flights|&gt;
+    #select(arr_time)|&gt;
+    group_by()|&gt;
+    summarize(n = (sum(is.na(arr_time))))
+}
+filter_severe()</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##       n
+##   &lt;int&gt;
+## 1  8713</code></pre>
+<pre class="r"><code>library(nycflights13)
+filter_severe_1 &lt;- function() {
+  flights|&gt;
+    #select(dep_time, sched_dep_time)|&gt;
+    mutate(delay = dep_time - sched_dep_time)|&gt;
+    ggplot(aes(x = delay)) + 
+      geom_histogram()
+}
+filter_severe_1()</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<pre><code>## Warning: Removed 8255 rows containing non-finite values (`stat_bin()`).</code></pre>
+<p><img src="index_4_files/figure-html/unnamed-chunk-50-1.png" width="672" /></p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
